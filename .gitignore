@@ -1,0 +1,82 @@
+# =========================
+# Node / Express
+# =========================
+
+backend/node_modules/
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+
+# =========================
+# Database
+# =========================
+
+backend/database.sqlite
+backend/database.sqlite-*
+backend/*.sqlite
+backend/*.sqlite3
+backend/*.db
+
+
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+
+# =========================
+# ML Models / Artifacts
+# =========================
+
+model.pkl
+scaler.pkl
+
+# Other common serialized model files
+*.joblib
+
+# Training outputs
+models/
+artifacts/
+
+
+# =========================
+# OS / Editor
+# =========================
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+
+
+# =========================
+# Logs
+# =========================
+
+*.log
+logs/
+
+
+# =========================
+# Temporary files
+# =========================
+
+*.tmp
+*.temp
+*.swp
+*.swo
