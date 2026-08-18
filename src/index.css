@@ -1,0 +1,15 @@
+:root {
+	--text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+}
+
+* {
+	margin: 0;
+	font-family: "BR Cobane", "Inter", "Robotto", Arial, Helvetica, sans-serif;
+	color: var(--text);
+}
+
+body {
+	background: var(--bg);
+}
