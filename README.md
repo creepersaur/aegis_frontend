@@ -71,6 +71,17 @@ aegis/
 │   ├── package.json
 │   └── package-lock.json
 │
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── package.json
+│   └── vite.config.ts
+│
 ├── notebook/
 │   ├── dataset.csv
 │   └── notebook.ipynb
@@ -94,9 +105,13 @@ aegis/
   * **`package.json` / `package-lock.json`** — Backend dependencies and project configuration.
 
 * **`notebook/`** — Contains the machine-learning experimentation and dataset used during development.
-
   * **`notebook.ipynb`** — Jupyter Notebook containing the ML experimentation and anomaly-detection work.
   * **`dataset.csv`** — Dataset used for model development and analysis.
+
+* **`frontend/`** — The React (Vite) user interface for AEGIS.
+  * **`src/components/`** — Reusable UI components (StartScreen, Register, Login, HomeScreen).
+  * **`src/context/`** — Global state management (e.g., AuthContext for JWT sessions).
+  * **`src/hooks/`** — Custom React hooks (e.g., `useSensorWebSocket.ts` for capturing device motion).
 
 * **`.gitignore`** — Specifies files and directories that should not be tracked by Git.
 
@@ -163,10 +178,10 @@ Future development will connect the anomaly detection pipeline to the emergency-
 
 ### Frontend
 
-* Develop the planned **React-based frontend**.
-* Provide a real-time dashboard for monitoring sensor data and detected anomalies.
-* Display location, incident status, detection-layer progress, and emergency-response information.
-* Integrate the frontend with the backend through APIs and WebSockets.
+The React-based frontend has been established as a Vite Single Page Application (SPA).
+* **Live Sensor Dashboard**: A real-time interface monitoring device acceleration and rotation, built via custom hooks.
+* **Authentication & Medical Profiles**: Secure JWT-based Login/Registration flows that capture crucial emergency medical data (allergies, emergency contacts, primary doctor) into a centralized SQLite database.
+* **Future Work**: Display incident status, detection-layer progress, and emergency-response information in real-time.
 
 ### Overall Development Roadmap
 
@@ -197,10 +212,10 @@ Final Integration
   ├── Multi-layer Validation         ☐
   ├── Emergency Contact System       ☐
   ├── Emergency Services Integration ☐
-  └── Real-time React Dashboard      ☐
+  └── Real-time React Dashboard      ✓
 ```
 
-AEGIS is being developed incrementally, with the current focus on establishing the **ML and backend foundation** before integrating real-time sensor streams and the remaining detection layers.
+AEGIS is being developed incrementally. The **ML, backend foundation, authentication, medical data schemas, and the real-time React dashboard** have now been established. The next major focus is refining the ML inference loop and integrating the remaining detection layers.
 
 ---
 
