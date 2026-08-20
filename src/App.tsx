@@ -1,11 +1,24 @@
-import "./App.css";
+import React, { type Dispatch, type SetStateAction } from "react";
+import StartScreen from "./components/startscreen/startscreen";
+import HomeScreen from "./components/homescreen/homescreen";
+
+export type Screen = "start" | "home"
+
+function GetScreen(props: {
+	screen: Screen, setScreen: Dispatch<SetStateAction<Screen>>
+}) {
+	switch (props.screen) {
+		case "start": return <StartScreen navigate={props.setScreen}/>
+		case "home": return <HomeScreen navigate={props.setScreen}/>
+	}
+}
 
 function App() {
-	return (
-		<>
-			Hello World
-		</>
-	);
+	const [screen, setScreen] = React.useState<Screen>("start");
+
+	return <div id="app">
+		<GetScreen screen={screen} setScreen={setScreen}/>
+	</div>
 }
 
 export default App;

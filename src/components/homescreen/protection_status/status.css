@@ -1,0 +1,48 @@
+div.protection-status {
+	width: calc(100% - 40px);
+	height: max-content;
+	display: flex;
+	flex-direction: row;
+	border: 1px solid var(--accent-inner);
+	border-radius: 30px;
+	aspect-ratio: 2;
+	align-items: center;
+	padding: 20px;
+	padding-top: 10px;
+	gap: 20px;
+
+    border: 2px solid transparent;
+    background:
+        linear-gradient(black) padding-box,
+        linear-gradient(var(--accent-dark), black 20%) border-box;
+
+	animation: 1s status_spawn forwards;
+}
+
+@keyframes status_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 50%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0;
+	}
+}
+
+img.protection-icon {
+	height: 70%;
+	aspect-ratio: 1;
+}
+
+.protection-header {
+	color: white;
+	font-size: 30px;
+}
+
+.protection-header .status {
+	color: var(--status-active);
+	font-size: 30px;
+	display: block;
+	margin-bottom: 0.5em;
+}
