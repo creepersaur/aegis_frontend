@@ -8,14 +8,18 @@ module.exports = async (req, res) => {
         const { email, password } = req.body;
 
         if (!email) {
-            return res.status(400).response('Please enter a valid email.');
+            return res.status(400).json({ 'message': 'Please enter a valid email.' });
         }
 
         if (!password) {
-            return res.status(400).response('Please enter a valid password');S
+            return res.status(400).json({ 'message': 'Please enter a valid password.' });
         }
 
         const user = await User.findOne({ where: {email: email} });
+        if (!user) {
+            return res.status(401).json({ 'message': 'Invalid credentials.' });
+        }
+
         if (await bcrypt.compare(password, user.password)) {
             const payload = {
                 'id': user.id,
@@ -23,8 +27,13 @@ module.exports = async (req, res) => {
                 'email': user.email,
                 'createdAt': user.createdAt
             };
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { 'expiresIn': '7d' });
-            res.cookie('token', token); // secure this cookie
+            const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { 'expiresIn': '7d' });
+            res.cookie('token', token, {
+                httpOnly: true,
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
             return res.status(200).json({ 'message': 'Login successful.' });
         }
         return res.status(401).json({ 'message': 'Invalid credentials.' });

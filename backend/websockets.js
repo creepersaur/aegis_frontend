@@ -1,11 +1,11 @@
-const cookie = require("cookie");
+const { parseCookie } = require("cookie");
 const jwt = require("jsonwebtoken");
 const { predictProba } = require("./utils/logisticRegression");
 const { processBatch } = require("./utils/batchProcessor");
 
 const socketAuth = (socket, next) => {
     try {
-        const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+        const cookies = parseCookie(socket.handshake.headers.cookie || "");
         const token = cookies.token;
 
         if (!token) {

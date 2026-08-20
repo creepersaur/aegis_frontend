@@ -1,0 +1,15 @@
+div.bottombar {
+	position: fixed;
+	display: flex;
+	bottom: 0;
+	margin-bottom: 1em;
+	width: calc(100% - 40px);
+	height: 4em;
+	gap: 0.5em;
+}
+
+.bottombar span {
+	flex-grow: 1;
+	background: red;
+	display: inline-block;
+}

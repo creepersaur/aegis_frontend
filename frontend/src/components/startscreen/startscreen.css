@@ -1,0 +1,66 @@
+div.homescreen {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 40px);
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	gap: 20px;
+}
+
+button.get-started {
+	padding-block: 15px;
+	padding-inline: 60px;
+	background: linear-gradient(var(--accent) -10%, var(--accent-inner) 75%);
+	border: 2px solid var(--accent);
+	color: white;
+	border-radius: 20px;
+	width: max-content;
+	cursor: pointer;
+
+	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+button.get-started:hover {
+	scale: 1.08 1.1;
+	border-color: white;
+	filter: brightness(1.2);
+}
+
+button.get-started:active {
+	scale: 1;
+	opacity: 0.8;
+}
+
+img.aegis-icon {
+	width: calc(155%);
+	filter: hue-rotate(10deg);
+	z-index: 500;
+	filter: blur(0em) brightness(1.0);
+	backdrop-filter: blur(0em);
+
+	transition: 1s;
+}
+
+img.aegis-icon.transitioning {
+	scale: 5;
+	filter: blur(1em) brightness(0.0);
+	backdrop-filter: blur(1em);
+}
+
+img.aegis-logo {
+	width: calc(80%);
+}
+
+div.logo-subtext {
+	color: white;
+	margin-top: -1em;
+	user-select: none;
+}
+
+div.getstarted-subtext {
+	color: white;
+	margin-top: 0.5em;
+	user-select: none;
+}

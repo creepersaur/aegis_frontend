@@ -6,13 +6,20 @@ const { Server } = require("socket.io");
 const app = express();
 const port = 3000;
 const server = http.createServer(app);
+const cors = require("cors");
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "http://localhost:5173", // Locked down to frontend URL
         methods: ["GET", "POST"],
         credentials: true
     }
 });
+
+// Apply CORS to standard HTTP routes
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser());
