@@ -8,8 +8,33 @@ div.bottombar {
 	gap: 0.5em;
 }
 
-.bottombar span {
+.bottombar button {
 	flex-grow: 1;
-	background: red;
+	background: transparent;
+	position: relative;
 	display: inline-block;
+	border: none;
+	cursor: pointer;
+}
+
+.bottombar svg {
+	scale: 1.5;
+	translate: 0 -50%;
+}
+
+.bottombar button.active, .bottombar button.active svg {
+	color: var(--accent);
+	stroke: black;
+}
+
+.bottombar button.active::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate: -50% -110%;
+	width: 100%;
+	height: 50%;
+	background: var(--accent);
+	border-radius: 100px;
 }

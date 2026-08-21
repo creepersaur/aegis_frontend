@@ -2,14 +2,14 @@ import React, { type Dispatch, type SetStateAction } from "react";
 import StartScreen from "./components/startscreen/startscreen";
 import HomeScreen from "./components/homescreen/homescreen";
 
-export type Screen = "start" | "home"
+export type Screen = "start" | "home" | "alerts" | "contacts" | "settings"
 
 function GetScreen(props: {
 	screen: Screen, setScreen: Dispatch<SetStateAction<Screen>>
 }) {
 	switch (props.screen) {
 		case "start": return <StartScreen navigate={props.setScreen}/>
-		case "home": return <HomeScreen navigate={props.setScreen}/>
+		case "home": return <HomeScreen screen={props.screen} navigate={props.setScreen}/>
 	}
 }
 
