@@ -51,7 +51,7 @@ scaler.pkl
 *.joblib
 
 # Training outputs
-models/
+/models/
 artifacts/
 
 
