@@ -15,6 +15,15 @@ div.bottombar {
 	display: inline-block;
 	border: none;
 	cursor: pointer;
+	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.bottombar button:not(.active):hover {
+	scale: 1.1;
+}
+
+.bottombar button:not(.active):active {
+	scale: 0.9;
 }
 
 .bottombar svg {
@@ -27,14 +36,25 @@ div.bottombar {
 	stroke: black;
 }
 
-.bottombar button.active::before {
+.bottombar button:not(.active):hover, .bottombar button:not(.active):hover svg {
+	color: white;
+	stroke: white;
+}
+
+.bottombar button::before {
 	content: '';
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	translate: -50% -110%;
 	width: 100%;
+	scale: 0 1;
 	height: 50%;
 	background: var(--accent);
 	border-radius: 100px;
+	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.bottombar button.active::before {
+	scale: 1;
 }
