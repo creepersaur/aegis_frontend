@@ -58,18 +58,14 @@ function GetScreen(props: {
 function App() {
 	const [screens, setScreens] = React.useState<Screen[]>(["start"]);
 	const setScreen = (new_screen: Screen) => {
-		if (new_screen == "home") {
-			setScreens([new_screen]);
-			return;
-		}
-		setScreens((prev) => [...prev, new_screen]);
+		setScreens([new_screen])
 	};
 
 	return (
 		<div id="app">
 			<GetScreen screens={screens} setScreens={setScreens} navigate={setScreen} />
 			{screens.at(-1) !== "start" && (
-				<BottomBar screen={screens.at(-1)!} navigate={setScreen} />
+				<BottomBar screen={screens[0]} navigate={setScreen} />
 			)}
 		</div>
 	);
