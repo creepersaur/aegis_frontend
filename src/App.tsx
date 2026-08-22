@@ -7,32 +7,60 @@ import BottomBar from "./components/bottombar/bottombar";
 export type Screen = "start" | "home" | "alerts" | "contacts" | "settings";
 
 function GetScreen(props: {
-	screen: Screen;
-	setScreen: Dispatch<SetStateAction<Screen>>;
+	screens: Screen[];
+	setScreens: Dispatch<SetStateAction<Screen[]>>;
+	navigate: (new_screen: Screen) => void,
 }) {
-	switch (props.screen) {
+	switch (props.screens.at(-1)) {
 		case "start":
-			return <StartScreen navigate={props.setScreen} />;
+			return <StartScreen navigate={props.navigate} />;
 
 		case "home":
-			return <HomeScreen />;
+			return (
+				<HomeScreen
+					screens={props.screens}
+					setScreens={props.setScreens}
+				/>
+			);
 		case "alerts":
-			return <HomeScreen />;
+			return (
+				<HomeScreen
+					screens={props.screens}
+					setScreens={props.setScreens}
+				/>
+			);
 		case "contacts":
-			return <HomeScreen />;
+			return (
+				<HomeScreen
+					screens={props.screens}
+					setScreens={props.setScreens}
+				/>
+			);
 		case "settings":
-			return <Settings />;
+			return (
+				<Settings
+					screens={props.screens}
+					setScreens={props.setScreens}
+				/>
+			);
 	}
 }
 
 function App() {
-	const [screen, setScreen] = React.useState<Screen>("start");
+	const [screens, setScreens] = React.useState<Screen[]>(["start"]);
+	const setScreen = (new_screen: Screen) => {
+		if (new_screen == "home") {
+			setScreens([new_screen]);
+			return;
+		}
+		setScreens((prev) => [...prev, new_screen]);
+	};
 
 	return (
 		<div id="app">
-			<GetScreen screen={screen} setScreen={setScreen} />
-			{screen !== "start" && (
-				<BottomBar screen={screen} navigate={setScreen} />
+			<GetScreen screens={screens} setScreens={setScreens} navigate={setScreen} />
+			{screens.at(-1) !== "start" && (
+				<BottomBar screen={screens.at(-1)!} navigate={setScreen} />
 			)}
 		</div>
 	);

@@ -2,17 +2,6 @@ div.topbar .aegis-logo {
 	animation: 2s logo_spawn cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
 }
 
-@keyframes logo_spawn {
-	0% {
-		opacity: 0;
-		translate: -50% 100%;
-	}
-	100% {
-		opacity: 1;
-		translate: -50% -50%;
-	}
-}
-
 @keyframes settings_spawn {
 	0% {
 		opacity: 0;

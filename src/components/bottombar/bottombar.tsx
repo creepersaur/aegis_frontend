@@ -1,11 +1,10 @@
 import { AlertCircle, Contact, Home, Settings } from "lucide-react";
 import "./bottombar.css";
-import type { Dispatch, SetStateAction } from "react";
 import type { Screen } from "../../App";
 
 export default function BottomBar(props: {
 	screen: Screen,
-	navigate: Dispatch<SetStateAction<Screen>>;
+	navigate: (new_screen: Screen) => void;
 }) {
 	const buttons: {Name: string, Icon: React.ElementType, Screen: Screen}[] = [
 		{
