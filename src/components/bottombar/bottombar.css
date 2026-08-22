@@ -17,6 +17,8 @@ div.bottombar {
 	width: calc(100% - 40px);
 	height: 4em;
 	gap: 0.5em;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	padding-top: 30px;
 
 	animation: 1s bottombar_spawn forwards;
 }

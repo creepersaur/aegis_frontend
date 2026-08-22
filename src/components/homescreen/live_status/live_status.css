@@ -1,0 +1,30 @@
+div.live-status {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% - 40px);
+	padding: 20px;
+	justify-content: center;
+	align-items: center;
+}
+
+.live-status strong {
+	font-size: 30px;
+	color: white;
+	margin-bottom: 20px;
+}
+
+.live-status .systems-normal {
+	font-size: 20px;
+}
+
+.live-status .systems-normal svg {
+	vertical-align: middle;
+	scale: 0.9;
+	translate: 0 -0.1em;
+	stroke: black;
+	fill: rgb(0, 255, 98);
+}
+
+.livestatus-icon {
+	scale: 1.2;
+}

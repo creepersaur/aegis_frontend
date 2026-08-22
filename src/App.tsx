@@ -3,8 +3,9 @@ import StartScreen from "./components/startscreen/startscreen";
 import HomeScreen from "./components/homescreen/homescreen";
 import Settings from "./components/settings/settings";
 import BottomBar from "./components/bottombar/bottombar";
+import LiveStatus from "./components/homescreen/live_status/live_status";
 
-export type Screen = "start" | "home" | "alerts" | "contacts" | "settings";
+export type Screen = "start" | "home" | "alerts" | "contacts" | "settings" | "liveStatus";
 
 function GetScreen(props: {
 	screens: Screen[];
@@ -39,6 +40,14 @@ function GetScreen(props: {
 		case "settings":
 			return (
 				<Settings
+					screens={props.screens}
+					setScreens={props.setScreens}
+				/>
+			);
+
+		case "liveStatus":
+			return (
+				<LiveStatus
 					screens={props.screens}
 					setScreens={props.setScreens}
 				/>

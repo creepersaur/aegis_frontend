@@ -21,6 +21,7 @@ div.topbar {
 	margin-left: 10px;
 	translate: 0 -7%;
 	opacity: 0.8;
+	cursor: pointer;
 
 	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }

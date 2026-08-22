@@ -11,7 +11,7 @@ export default function HomeScreen(props: {
 }) {
 	return <>
 		<TopBar screens={props.screens} setScreens={props.setScreens} />
-		<ProtectionStatus/>
+		<ProtectionStatus setScreens={props.setScreens}/>
 		<SensorList/>
 	</>
 }
