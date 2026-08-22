@@ -30,7 +30,8 @@ div.sensor-item {
 	display: flex;
 	gap: 20px;
 	width: calc(100% - 10px);
-	padding-left: 10px;
+	padding-left: 15px;
+	padding-top: 2px;
 	height: 50px;
 	background: transparent;
 	align-items: center;

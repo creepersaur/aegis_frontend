@@ -49,3 +49,9 @@ img.protection-icon {
 	display: block;
 	margin-bottom: 0.5em;
 }
+
+.protection-header .status svg {
+	stroke: var(--status-active);
+	vertical-align: middle;
+	translate: -0.2em -0.05em;
+}

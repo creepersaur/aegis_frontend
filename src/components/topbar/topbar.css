@@ -24,6 +24,7 @@ div.topbar {
 	cursor: pointer;
 
 	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+	animation: 0.5s backbutton_spawn cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .back-button:hover {
@@ -34,4 +35,15 @@ div.topbar {
 .back-button:active {
 	scale: 1.3;
 	opacity: 0.5;
+}
+
+@keyframes backbutton_spawn {
+	0% {
+		opacity: 0;
+		scale: 0;
+	}
+	100% {
+		opacity: 1;
+		scale: 1.5;
+	}
 }

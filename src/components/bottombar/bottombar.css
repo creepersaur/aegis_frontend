@@ -10,15 +10,20 @@
 }
 
 div.bottombar {
-	position: fixed;
+	position: absolute;
 	display: flex;
-	bottom: 0;
+	left: 0;
+	bottom: -20px;
 	margin-bottom: 1em;
-	width: calc(100% - 40px);
+	width: calc(100% - 20px);
 	height: 4em;
 	gap: 0.5em;
 	border-top: 1px solid rgba(255, 255, 255, 0.1);
 	padding-top: 30px;
+	padding-bottom: 20px;
+	padding-inline: 10px;
+	z-index: 10;
+	backdrop-filter: blur(10px);
 
 	animation: 1s bottombar_spawn forwards;
 }

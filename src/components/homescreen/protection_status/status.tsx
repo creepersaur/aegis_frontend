@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import "./status.css";
 import type { Screen } from "../../../App";
+import { ChevronRight } from "lucide-react";
 
 export default function ProtectionStatus(props: {
 	setScreens: Dispatch<SetStateAction<Screen[]>>;
@@ -18,7 +19,7 @@ export default function ProtectionStatus(props: {
 
 			<div className="protection-header">
 				Protection
-				<span className="status">Active</span>
+				<span className="status">Active <ChevronRight/></span>
 
 				<p>Click to view status</p>
 			</div>
