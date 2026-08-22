@@ -1,17 +1,9 @@
 import "./settings.css";
-import TopBar from "../topbar/topbar";
 import { ChevronRight, Info } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
-import type { Screen } from "../../App";
 
-export default function Settings(props: {
-	screens: Screen[];
-	setScreens: Dispatch<SetStateAction<Screen[]>>;
-}) {
+export default function Settings() {
 	return (
 		<>
-			<TopBar screens={props.screens} setScreens={props.setScreens} />
-
 			<span className="settings-title">Settings</span>
 
 			<div className="settings-items">

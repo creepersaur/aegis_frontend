@@ -1,17 +1,9 @@
-import type { Dispatch, SetStateAction } from "react";
 import "./live_status.css";
-import TopBar from "../../topbar/topbar";
-import type { Screen } from "../../../App";
 import { ChevronDown, Circle } from "lucide-react";
 
-export default function LiveStatus(props: {
-	screens: Screen[];
-	setScreens: Dispatch<SetStateAction<Screen[]>>;
-}) {
+export default function LiveStatus() {
 	return (
 		<>
-			<TopBar screens={props.screens} setScreens={props.setScreens} />
-
 			<div className="live-status">
 				<strong>Live Status</strong>
 
