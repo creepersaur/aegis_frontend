@@ -12,7 +12,7 @@ div.homescreen {
 button.get-started {
 	padding-block: 15px;
 	padding-inline: 60px;
-	background: linear-gradient(var(--accent) -10%, var(--accent-inner) 75%);
+	background: transparent;
 	border: 2px solid var(--accent);
 	color: white;
 	border-radius: 20px;
@@ -24,7 +24,9 @@ button.get-started {
 
 button.get-started:hover {
 	scale: 1.08 1.1;
-	border-color: white;
+	color: black;
+	background: var(--accent);
+	font-weight: 600;
 	filter: brightness(1.2);
 }
 
