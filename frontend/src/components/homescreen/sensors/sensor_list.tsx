@@ -30,7 +30,7 @@ export default function SensorList() {
 		}
 	]
 
-	return <>
+	return <div className="sensors">
 		<span className="sensor-title">Sensors & Permissions</span>
 
 		<div className="sensor-list">
@@ -46,5 +46,5 @@ export default function SensorList() {
 				})
 			}
 		</div>
-	</>
+	</div>
 }

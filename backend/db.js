@@ -9,6 +9,6 @@ const sequelize = new Sequelize({
 sequelize.authenticate()
     .then(() => console.log('SQLite connected successfully'))
     .catch((err) => console.error('Error connecting to SQLite:', err));
-sequelize.sync({ alter: true });
+sequelize.sync();
 
 module.exports = sequelize;

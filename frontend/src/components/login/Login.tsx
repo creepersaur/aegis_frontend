@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Screen } from "../../App";
 import { useAuth } from "../../context/AuthContext";
+import { requestSensorPermissions } from "../../utils/requestSensorPermissions";
 import "./login.css";
 import "../register/register.css"; 
 
-export default function LoginScreen(props: { navigate: React.Dispatch<React.SetStateAction<Screen>> }) {
+export default function LoginScreen(props: { navigate: (new_screen: Screen) => void }) {
     const { setIsAuthenticated } = useAuth();
     
     const [email, setEmail] = useState("");
@@ -34,7 +35,10 @@ export default function LoginScreen(props: { navigate: React.Dispatch<React.SetS
             const data = await response.json();
 
             if (response.ok) {
+                localStorage.setItem('isReturningUser', 'true');
                 setIsAuthenticated(true);
+                // Request sensor permission gesture requirement before navigating
+                await requestSensorPermissions();
                 props.navigate("home");
             } else {
                 setError(data.message || "Invalid credentials.");
@@ -79,12 +83,14 @@ export default function LoginScreen(props: { navigate: React.Dispatch<React.SetS
                 >
                     {isLoading ? "Logging in..." : "Login"}
                 </button>
-                
-                <div 
-                    className="switch-link"
-                    onClick={() => props.navigate("register")}
-                >
-                    Don't have an account? Register
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                    <span style={{ color: '#aaa', fontSize: '14px' }}>Don't have an account? </span>
+                    <span 
+                        style={{ color: '#ff5c00', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }} 
+                        onClick={() => props.navigate("register")}
+                    >
+                        Register
+                    </span>
                 </div>
             </div>
         </div>

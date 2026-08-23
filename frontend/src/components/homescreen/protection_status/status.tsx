@@ -1,19 +1,27 @@
+import type { Dispatch, SetStateAction } from "react";
 import "./status.css";
+import type { Screen } from "../../../App";
+import { ChevronRight } from "lucide-react";
 
-export default function ProtectionStatus() {
+export default function ProtectionStatus(props: {
+	setScreens: Dispatch<SetStateAction<Screen[]>>;
+}) {
 	return (
-		<div className="protection-status">
+		<div
+			className="protection-status"
+			onClick={() => props.setScreens((prev) => [...prev, "liveStatus"])}
+		>
 			<img
 				className="protection-icon"
-				src="https://preview.redd.it/random-question-but-does-anyone-have-versions-of-this-cat-v0-ya8qikz9kn0f1.png?auto=webp&s=c2fdba9a3904ab3bec9e7367e380f66343c2929a"
+				src="src/assets/protection_shield.png"
 				alt="aegis icon gif"
 			/>
 
 			<div className="protection-header">
 				Protection
-				<span className="status">Active</span>
+				<span className="status">Active <ChevronRight/></span>
 
-				<p>Aegis is monitoring for any anomalies.</p>
+				<p>Click to view status</p>
 			</div>
 		</div>
 	);

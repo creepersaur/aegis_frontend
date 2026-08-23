@@ -1,0 +1,99 @@
+div.topbar .aegis-logo {
+	animation: 2s logo_spawn cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+}
+
+@keyframes settings_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 20%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0%;
+	}
+}
+
+@keyframes settings_title_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 200%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0%;
+	}
+}
+
+span.settings-title {
+	font-size: 25px;
+	display: block;
+	margin-bottom: 20px;
+	color: white;
+
+	opacity: 0;
+	animation: 1s settings_title_spawn forwards 0.1s;
+}
+
+div.settings-items {
+	display: flex;
+	overflow: hidden;
+	margin: 10px;
+	flex-direction: column;
+	border-radius: 10px;
+	position: relative;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+
+	opacity: 0;
+	animation: 1s settings_spawn forwards 0.5s;
+}
+
+.settings-items button {
+	text-align: left;
+	border: none;
+	padding: 15px;
+	background: transparent;
+	cursor: pointer;
+	transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.settings-items button:hover, .settings-items button:hover svg {
+	background: rgba(255, 255, 255, 0.1);
+	transition: 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
+	stroke: white;
+	color: white;
+}
+
+.settings-items button svg {
+	background: transparent !important;
+	stroke: rgba(255, 255, 255, 0.5);
+	position: absolute;
+	vertical-align: middle;
+	translate: 0 -5px;
+	right: 10px;
+}
+
+div.tnc {
+	padding: 20px;
+	padding-top: 10px;
+	font-size: 15px;
+
+	opacity: 0;
+	animation: 1s settings_spawn forwards 1s;
+}
+
+div.tnc svg {
+	stroke: white;
+	width: 15px;
+	vertical-align: middle;
+	translate: 0 -10%;
+}
+
+div.tnc strong {
+	color: white;
+	font-size: 15px;
+	cursor: pointer;
+}
+
+div.tnc strong:hover {
+	text-decoration: underline;
+}

@@ -3,20 +3,24 @@ div.protection-status {
 	height: max-content;
 	display: flex;
 	flex-direction: row;
-	border: 1px solid var(--accent-inner);
-	border-radius: 30px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 10px;
 	aspect-ratio: 2;
 	align-items: center;
 	padding: 20px;
 	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 30px;
 	gap: 20px;
-
-    border: 2px solid transparent;
-    background:
-        linear-gradient(black) padding-box,
-        linear-gradient(var(--accent-dark), black 20%) border-box;
+	transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+	cursor: pointer;
 
 	animation: 1s status_spawn forwards;
+}
+
+div.protection-status:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transition: 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 @keyframes status_spawn {
@@ -31,8 +35,7 @@ div.protection-status {
 }
 
 img.protection-icon {
-	height: 70%;
-	aspect-ratio: 1;
+	height: 90%;
 }
 
 .protection-header {
@@ -45,4 +48,10 @@ img.protection-icon {
 	font-size: 30px;
 	display: block;
 	margin-bottom: 0.5em;
+}
+
+.protection-header .status svg {
+	stroke: var(--status-active);
+	vertical-align: middle;
+	translate: -0.2em -0.05em;
 }

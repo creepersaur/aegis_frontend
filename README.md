@@ -180,7 +180,10 @@ Future development will connect the anomaly detection pipeline to the emergency-
 
 The React-based frontend has been established as a Vite Single Page Application (SPA).
 * **Live Sensor Dashboard**: A real-time interface monitoring device acceleration and rotation, built via custom hooks.
-* **Authentication & Medical Profiles**: Secure JWT-based Login/Registration flows that capture crucial emergency medical data (allergies, emergency contacts, primary doctor) into a centralized SQLite database.
+* **Automated Telemetry**: Seamlessly starts streaming batched 10-second sensor data securely upon user authentication.
+* **Authentication & Medical Profiles**: Secure stateful JWT-based Login/Registration flows that capture crucial emergency medical data into a centralized SQLite database.
+* **Device & Session Management**: Tracks user sessions in the database, allowing users to view active devices (with IP capture) and remotely revoke access from other locations.
+* **iOS Permission Compatibility**: Implements explicit user-gesture permission flows required for `DeviceMotionEvent` access on iOS browsers.
 * **Future Work**: Display incident status, detection-layer progress, and emergency-response information in real-time.
 
 ### Overall Development Roadmap
@@ -190,8 +193,11 @@ Currentgit init.
   │
   ├── ML API                         ✓
   ├── Authentication System          ✓
+  ├── Stateful JWT Sessions          ✓
   ├── Real-time WebSocket Layer      ✓
   ├── Motion Anomaly Detection       ✓
+  ├── Automated Sensor Tracking      ✓
+  ├── iOS Permission Compatibility   ✓
   │
   ▼
 Layer 2

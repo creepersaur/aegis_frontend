@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import type { Screen } from "../../App";
 import { useAuth } from "../../context/AuthContext";
+import { requestSensorPermissions } from "../../utils/requestSensorPermissions";
 import "./register.css";
 
-export default function RegisterScreen({ navigate }: { navigate: React.Dispatch<React.SetStateAction<Screen>> }) {
+export default function RegisterScreen({ navigate }: { navigate: (new_screen: Screen) => void }) {
     const { checkAuth } = useAuth();
     const [step, setStep] = useState(1);
     const [error, setError] = useState<string | null>(null);
@@ -87,8 +88,12 @@ export default function RegisterScreen({ navigate }: { navigate: React.Dispatch<
                 return;
             }
 
+            localStorage.setItem('isReturningUser', 'true');
             // Verify auth state with backend now that cookie is set
             await checkAuth();
+            
+            // Request sensor permission gesture requirement before navigating
+            await requestSensorPermissions();
             navigate("home");
         } catch (err) {
             console.error(err);
@@ -203,14 +208,14 @@ export default function RegisterScreen({ navigate }: { navigate: React.Dispatch<
                     {step < 4 && <button type="button" className="btn-primary" onClick={nextStep}>Next</button>}
                     {step === 4 && <button type="submit" className="btn-primary" disabled={isLoading}>{isLoading ? 'Registering...' : 'Register'}</button>}
                 </div>
-                
-                <div style={{ marginTop: '20px' }}>
-                    <div 
-                        className="switch-link"
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                    <span style={{ color: '#aaa', fontSize: '14px' }}>Already have an account? </span>
+                    <span 
+                        style={{ color: '#ff5c00', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }} 
                         onClick={() => navigate("login")}
                     >
-                        Already have an account? Login
-                    </div>
+                        Login
+                    </span>
                 </div>
             </form>
         </div>

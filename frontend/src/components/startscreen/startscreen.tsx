@@ -4,21 +4,27 @@ import GetStartedButton from "./getstartedbutton";
 import "./startscreen.css";
 import { useAuth } from "../../context/AuthContext";
 
-export default function StartScreen(props: {navigate: React.Dispatch<React.SetStateAction<Screen>>}) {
+export default function StartScreen(
+	props: { navigate: (new_screen: Screen) => void },
+) {
 	const [transitioning, setTransitioning] = React.useState(false);
 	const { isAuthenticated, isLoading } = useAuth();
 
 	function goToHome() {
-		if (isLoading) return;
-
+		if (isLoading) return; // Prevent routing while auth status is being checked
+		
 		setTransitioning(true);
+		
 		setTimeout(() => {
 			if (isAuthenticated) {
-                console.log("Routing to Home");
 				props.navigate("home");
 			} else {
-                console.log("Routing to Register");
-				props.navigate("register");
+				const isReturningUser = localStorage.getItem("isReturningUser");
+				if (isReturningUser) {
+					props.navigate("login");
+				} else {
+					props.navigate("register");
+				}
 			}
 		}, 1000);
 	}
@@ -36,22 +42,7 @@ export default function StartScreen(props: {navigate: React.Dispatch<React.SetSt
 				src="/Aegis GIF.gif"
 				alt="aegis icon gif"
 			/>
-			{isLoading ? (
-				<div style={{ color: "white", marginTop: "20px" }}>Loading...</div>
-			) : (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
-				    <GetStartedButton onClick={goToHome}/>
-                    <div 
-                        style={{ color: '#aaa', cursor: 'pointer', textDecoration: 'underline', fontSize: '14px' }}
-                        onClick={() => {
-                            if (!isAuthenticated) props.navigate("login");
-                            else props.navigate("home");
-                        }}
-                    >
-                        Already have an account? Login
-                    </div>
-                </div>
-			)}
+			<GetStartedButton onClick={goToHome} />
 			<div className="getstarted-subtext">Stay Protected. Always.</div>
 		</div>
 	);

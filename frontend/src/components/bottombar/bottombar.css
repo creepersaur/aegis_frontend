@@ -1,15 +1,80 @@
-div.bottombar {
-	position: fixed;
-	display: flex;
-	bottom: 0;
-	margin-bottom: 1em;
-	width: calc(100% - 40px);
-	height: 4em;
-	gap: 0.5em;
+@keyframes bottombar_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 200%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0%;
+	}
 }
 
-.bottombar span {
+div.bottombar {
+	position: absolute;
+	display: flex;
+	left: 0;
+	bottom: -20px;
+	margin-bottom: 1em;
+	width: calc(100% - 20px);
+	height: 4em;
+	gap: 0.5em;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	padding-top: 30px;
+	padding-bottom: 20px;
+	padding-inline: 10px;
+	z-index: 10;
+	backdrop-filter: blur(10px);
+
+	animation: 1s bottombar_spawn forwards;
+}
+
+.bottombar button {
 	flex-grow: 1;
-	background: red;
+	background: transparent;
+	position: relative;
 	display: inline-block;
+	border: none;
+	cursor: pointer;
+	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.bottombar button:not(.active):hover {
+	scale: 1.1;
+}
+
+.bottombar button:not(.active):active {
+	scale: 0.9;
+}
+
+.bottombar svg {
+	scale: 1.5;
+	translate: 0 -50%;
+}
+
+.bottombar button.active, .bottombar button.active svg {
+	color: var(--accent);
+	stroke: black;
+}
+
+.bottombar button:not(.active):hover, .bottombar button:not(.active):hover svg {
+	color: white;
+	stroke: white;
+}
+
+.bottombar button::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate: -50% -110%;
+	width: 100%;
+	scale: 0 1;
+	height: 50%;
+	background: var(--accent);
+	border-radius: 100px;
+	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.bottombar button.active::before {
+	scale: 1;
 }

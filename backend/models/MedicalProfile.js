@@ -33,10 +33,6 @@ const MedicalProfile = sequelize.define('MedicalProfile', {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    emergency_contacts: {
-        type: DataTypes.JSON,
-        allowNull: true
-    },
     primary_doctor_contact: {
         type: DataTypes.JSON,
         allowNull: true

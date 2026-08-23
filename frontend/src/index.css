@@ -7,6 +7,9 @@
 	--accent-dark: #442504;
 
 	--status-active: rgb(255, 187, 0);
+
+	--personal: rgb(255, 187, 0);
+	--vehicle: rgb(0, 183, 255);
 }
 
 * {
@@ -15,6 +18,7 @@
 	font-size: 20px;
 	color: var(--text);
 	font-weight: 300;
+	user-select: none;
 }
 
 body {

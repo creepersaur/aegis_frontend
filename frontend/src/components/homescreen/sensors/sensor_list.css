@@ -1,28 +1,46 @@
+div.sensors {
+	border-radius: 10px;
+	opacity: 0;
+
+	animation: 1s status_spawn forwards 0.2s;
+}
+
 span.sensor-title {
 	color: white;
 	font-size: 24px;
-	opacity: 0;
-	animation: 1s status_spawn forwards 0.5s;
+	margin-bottom: 10px;
 }
 
 div.sensor-list {
-	width: calc(100% - 40px);
+	width: 100%;
 	margin-top: 0.5em;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
-	padding: 20px;
+	padding-bottom: 0;
 	position: relative;
-	border-bottom: 1px dashed var(--accent-dark);
-	opacity: 0;
-	animation: 1s status_spawn forwards 0.7s;
+	border-radius: 10px;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 div.sensor-item {
+	cursor: pointer;
 	color: white;
 	font-size: 18px;
 	display: flex;
 	gap: 20px;
+	width: calc(100% - 10px);
+	padding-left: 15px;
+	padding-top: 2px;
+	height: 50px;
+	background: transparent;
+	align-items: center;
+	transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+div.sensor-item:hover {
+	background: rgba(255, 255, 255, 0.1);
+	transition: 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 div.sensor-item svg {
@@ -33,7 +51,6 @@ div.sensor-item svg {
 }
 
 div.sensor-item > svg {
-	translate: 0 -0.4em;
 	height: 1.5em;
 }
 
@@ -42,8 +59,8 @@ div.sensor-item .sensor-status {
 	position: absolute;
 	right: 10px;
 	color: var(--status-active);
-	translate: 0 -0.1em;
 	cursor: pointer;
+	font-size: 18px;
 
 	transition: 0.5s;
 }

@@ -1,7 +1,10 @@
 const User = require('../models/User');
+const Session = require('../models/Session');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const saltRounds = 12;
+const UAParser = require('ua-parser-js');
+const crypto = require('crypto');
+require("dotenv").config();
 
 module.exports = async (req, res) => {
     try {
@@ -21,13 +24,30 @@ module.exports = async (req, res) => {
         }
 
         if (await bcrypt.compare(password, user.password)) {
+            const sessionId = crypto.randomUUID();
+
             const payload = {
                 'id': user.id,
                 'fullName': user.fullName,
                 'email': user.email,
-                'createdAt': user.createdAt
+                'createdAt': user.createdAt,
+                'sessionId': sessionId
             };
-            const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { 'expiresIn': '7d' });
+            const token = jwt.sign(payload, process.env.JWT_SECRET, { 'expiresIn': '7d' });
+            
+            const parser = new UAParser(req.headers['user-agent']);
+            const result = parser.getResult();
+            const deviceName = `${result.browser.name || 'Unknown Browser'} on ${result.os.name || 'Unknown OS'}`;
+
+            const ipAddress = req.headers['x-forwarded-for']?.split(',')[0] || req.socket?.remoteAddress || req.ip || 'Unknown IP';
+
+            await Session.create({
+                id: sessionId,
+                user_id: user.id,
+                device_name: deviceName,
+                ip_address: ipAddress
+            });
+
             res.cookie('token', token, {
                 httpOnly: true,
                 sameSite: 'lax',
@@ -38,7 +58,7 @@ module.exports = async (req, res) => {
         }
         return res.status(401).json({ 'message': 'Invalid credentials.' });
     } catch (err) {
-        console.error('Error in login', err);
+        console.error('Error in login:', err);
         return res.status(500).json({ 'message': 'An unexpected error occurred.' });
     }
 };

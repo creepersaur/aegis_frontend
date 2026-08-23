@@ -1,10 +1,14 @@
 const { parseCookie } = require("cookie");
 const jwt = require("jsonwebtoken");
-const { predictProba } = require("./utils/logisticRegression");
-const { processBatch } = require("./utils/batchProcessor");
+const processBatch = require("./utils/processBatch");
+const { setAnomaly, getAnomaly } = require("./utils/redisHelper");
+const calculateDistance = require("./utils/calculateDistance");
+
+const SPEED_DROP_THRESHOLD = 0.7;
+const MIN_DISTANCE_THRESHOLD = 10; // in meters
 
 const socketAuth = (socket, next) => {
-    try {
+    try {   
         const cookies = parseCookie(socket.handshake.headers.cookie || "");
         const token = cookies.token;
 
@@ -12,7 +16,7 @@ const socketAuth = (socket, next) => {
             return next(new Error("Authentication error: Token missing"));
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         socket.user = decoded;
         next();
     } catch (err) {
@@ -21,107 +25,51 @@ const socketAuth = (socket, next) => {
     }
 };
 
-const handleSensorDataStream = (socket) => {
-    socket.on("sensor_data_stream", async (data) => {
-        try {
-            if (!data || typeof data !== 'object') {
-                return socket.emit("error", { message: "Invalid payload format" });
-            }
-
-            const {
-                Acc_X, Acc_Y, Acc_Z,
-                Gyro_X, Gyro_Y, Gyro_Z,
-                Speed, Speed_kmh,
-                Acceleration, Motion_Intensity
-            } = data;
-            const speed_ms = Speed !== undefined ? Speed : (Speed_kmh ? Speed_kmh / 3.6 : 0);
-            const accel = Acceleration !== undefined ? Acceleration : (Motion_Intensity || 0);
-            const angularSpeed = Math.sqrt(
-                Math.pow(Gyro_X || 0, 2) +
-                Math.pow(Gyro_Y || 0, 2) +
-                Math.pow(Gyro_Z || 0, 2)
-            );
-            const features = [
-                Acc_X || 0,
-                Acc_Y || 0,
-                Acc_Z || 0,
-                Gyro_X || 0,
-                Gyro_Y || 0,
-                Gyro_Z || 0,
-                speed_ms,
-                accel,
-                angularSpeed
-            ];
-
-            setImmediate(() => {
-                try {
-                    const proba = predictProba(features);
-                    const isAnomaly = proba > 0.5;
-
-                    if (isAnomaly) {
-                        const alertPayload = {
-                            timestamp: new Date().toISOString(),
-                            severity: proba > 0.8 ? 'CRITICAL' : 'HIGH',
-                            probability: proba,
-                            triggered_values: data
-                        };
-                        
-                        console.log(`[ALERT] Anomaly detected for user ${socket.user?.id || 'unknown'}. Prob: ${proba.toFixed(2)}`);
-                        socket.emit("anomaly_alert", alertPayload);
-                    }
-                } catch (predErr) {
-                    console.error("Prediction error:", predErr);
-                }
-            });
-
-        } catch (err) {
-            console.error("Sensor data stream error:", err);
-            socket.emit("error", { message: "Internal server error processing sensor data" });
-        }
-    });
-};
-
 const handleSensorBatchStream = (socket) => {
-    socket.on("sensor_batch_stream", (payload) => {
+    socket.on("sensor_batch_stream", async (payload) => {
         try {
-            if (!payload || typeof payload !== 'object' || !Array.isArray(payload.samples)) {
-                console.warn(`[WARN] Invalid batch payload from user ${socket.user?.id || 'unknown'}`);
-                return socket.emit("batch_error", { message: "Invalid payload format. Expected { samples: [...] }" });
+            if (!payload || typeof payload !== "object") {
+                return socket.emit("payload_error", { message: "Payload must be an object." });
             }
 
-            const { samples, timestamp_start, timestamp_end } = payload;
+            const { motionData, latitude, longitude } = payload;
+            const result = processBatch(motionData, latitude, longitude);
 
-            setImmediate(() => {
-                try {
-                    const result = processBatch(samples);
+            const prevAnomaly = await getAnomaly(socket.user.id);
+            if (prevAnomaly) {
+                const currentSpeed = result.lastSpeed;
+                const currentLatitude = result.latitude;
+                const currentLongitude = result.longitude;
 
-                    if (result.isAnomaly) {
-                        const alertPayload = {
-                            anomaly_score: result.maxProba,
-                            timestamp: new Date().toISOString(),
-                            trigger_features: result.triggerFeatures,
-                            suggested_action: result.maxProba > 0.8 ? "ESCALATE_CRITICAL" : "NOTIFY_CONTACTS",
-                            batch_window: { timestamp_start, timestamp_end }
-                        };
-                        
-                        console.log(`[ALERT] Anomaly detected in batch for user ${socket.user?.id || 'unknown'}. Max Prob: ${result.maxProba.toFixed(2)}`);
-                        socket.emit("anomaly_detected", alertPayload);
-                    } else {
-                        socket.emit("window_acknowledged", { 
-                            status: "normal", 
-                            processed_samples: result.totalSamples,
-                            timestamp_end
-                        });
-                    }
-                } catch (batchErr) {
-                    console.error("Batch processing error:", batchErr);
-                    socket.emit("batch_error", { message: "Error processing sensor batch window." });
+                const prevSpeed = prevAnomaly.lastSpeed;
+                const prevLatitude = prevAnomaly.latitude;
+                const prevLongitude = prevAnomaly.longitude;
+
+                const speedDip = ((prevSpeed - currentSpeed) / prevSpeed);
+                const distance = calculateDistance(currentLatitude, currentLongitude, prevLatitude, prevLongitude);
+
+                if (speedDip >= SPEED_DROP_THRESHOLD && distance <= MIN_DISTANCE_THRESHOLD) {
+                    return socket.emit("crash_alert", {
+                        message: "A potential vehicle crash has been detected."
+                    });
                 }
-            });
+            }
 
+            if (result.anomalyCount > 0) {
+                await setAnomaly(socket.user.id, result);
+                return socket.emit("sensor_alert", {
+                    message: "Anomalies have been detected in motion sensor readings."
+                });
+            } else {
+                return socket.emit("sensor_normal", {
+                    message: "No anomalies have been detected in motion sensor readings."
+                });
+            }
         } catch (err) {
-            console.error("Sensor batch stream error:", err);
-            socket.emit("batch_error", { message: "Internal server error parsing batch data." });
+            console.error("Batch processing error:", err);
+            return socket.emit("error", {
+                message: "An unexpected error occurred."
+            });
         }
     });
 };
@@ -130,13 +78,12 @@ module.exports = (io) => {
     io.use(socketAuth);
 
     io.on("connection", (socket) => {
-        console.log(`[INFO] Socket connected: ${socket.id} (User: ${socket.user?.id || 'unknown'})`);
+        console.log(`Socket connected: ${socket.id} (User: ${socket.user?.id || 'unknown'})`);
 
-        handleSensorDataStream(socket);
         handleSensorBatchStream(socket);
 
         socket.on("disconnect", (reason) => {
-            console.log(`[INFO] Socket disconnected: ${socket.id} | Reason: ${reason}`);
+            console.log(`Socket disconnected: ${socket.id} | Reason: ${reason}`);
         });
     });
 };

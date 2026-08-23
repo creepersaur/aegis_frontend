@@ -1,118 +1,78 @@
 import { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-export interface SensorData {
-    Acc_X: number;
-    Acc_Y: number;
-    Acc_Z: number;
-    Gyro_X: number;
-    Gyro_Y: number;
-    Gyro_Z: number;
-    Speed?: number;
-    Acceleration?: number;
-}
-
 export function useSensorWebSocket() {
     const [isTracking, setIsTracking] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [lastAnomaly, setLastAnomaly] = useState<any>(null);
 
     const socketRef = useRef<Socket | null>(null);
-    const bufferRef = useRef<SensorData[]>([]);
+    const bufferRef = useRef<number[][]>([]);
     const intervalRef = useRef<number | null>(null);
-    const startTimestampRef = useRef<string | null>(null);
+    const geoWatcherRef = useRef<number | null>(null);
+    const locationRef = useRef<{ latitude: number; longitude: number }>({ latitude: 0, longitude: 0 });
 
-    useEffect(() => {
-        socketRef.current = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000', {
-            withCredentials: true
-        });
 
-        socketRef.current.on('connect', () => {
-            console.log('Sensor WebSocket connected:', socketRef.current?.id);
-            setIsConnected(true);
-        });
-
-        socketRef.current.on('disconnect', () => {
-            console.log('Sensor WebSocket disconnected');
-            setIsConnected(false);
-            stopTracking();
-        });
-
-        socketRef.current.on('anomaly_detected', (data) => {
-            console.warn('ANOMALY DETECTED:', data);
-            setLastAnomaly(data);
-            alert(`⚠️ SAFETY ANOMALY DETECTED!\nScore: ${(data.anomaly_score * 100).toFixed(1)}%\nAction: ${data.suggested_action}`);
-        });
-
-        socketRef.current.on('batch_error', (error) => {
-            console.error('Batch Error:', error);
-        });
-
-        return () => {
-            if (socketRef.current) {
-                socketRef.current.disconnect();
-            }
-            stopTracking();
-        };
-    }, []);
 
     const handleDeviceMotion = (event: DeviceMotionEvent) => {
-        const { accelerationIncludingGravity, rotationRate } = event;
+        const accX = Number(event.accelerationIncludingGravity?.x) || 0;
+        const accY = Number(event.accelerationIncludingGravity?.y) || 0;
+        const accZ = Number(event.accelerationIncludingGravity?.z) || 0;
+        const gyroX = Number(event.rotationRate?.alpha) || 0;
+        const gyroY = Number(event.rotationRate?.beta) || 0;
+        const gyroZ = Number(event.rotationRate?.gamma) || 0;
         
-        const data: SensorData = {
-            Acc_X: accelerationIncludingGravity?.x || 0,
-            Acc_Y: accelerationIncludingGravity?.y || 0,
-            Acc_Z: accelerationIncludingGravity?.z || 0,
-            Gyro_X: rotationRate?.alpha || 0,
-            Gyro_Y: rotationRate?.beta || 0,
-            Gyro_Z: rotationRate?.gamma || 0,
-            Speed: 0,
-            Acceleration: 0
-        };
+        // ML model expects 9 features: [accX, accY, accZ, gyroX, gyroY, gyroZ, speed, accel, angularSpeed]
+        const speed = 0; // Placeholder, could be derived from GPS or integration
+        const accel = 0; // Placeholder
+        const angularSpeed = Math.sqrt(gyroX * gyroX + gyroY * gyroY + gyroZ * gyroZ);
 
-        bufferRef.current.push(data);
+        const sample = [accX, accY, accZ, gyroX, gyroY, gyroZ, speed, accel, angularSpeed];
+        bufferRef.current.push(sample);
     };
 
     const flushBatch = () => {
         if (!socketRef.current || !socketRef.current.connected) return;
         
-        const timestamp_end = new Date().toISOString();
-        
         if (bufferRef.current.length > 0) {
             socketRef.current.emit('sensor_batch_stream', {
-                samples: bufferRef.current,
-                timestamp_start: startTimestampRef.current,
-                timestamp_end: timestamp_end
+                motionData: bufferRef.current,
+                latitude: locationRef.current.latitude,
+                longitude: locationRef.current.longitude
             });
-            console.log(`Flushed batch of ${bufferRef.current.length} samples.`);
+            console.log(`Flushed batch of ${bufferRef.current.length} samples at [${locationRef.current.latitude}, ${locationRef.current.longitude}]`);
         }
 
         bufferRef.current = [];
-        startTimestampRef.current = timestamp_end;
     };
 
     const startTracking = async () => {
         if (isTracking) return;
 
-        if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
-            try {
-                const permissionState = await (DeviceMotionEvent as any).requestPermission();
-                if (permissionState !== 'granted') {
-                    alert('Sensor permission denied. Aegis cannot protect you without sensor access.');
-                    return;
-                }
-            } catch (error) {
-                console.error('Error requesting sensor permission:', error);
-                return;
-            }
+        // 2. Start Geolocation Tracking
+        if ("geolocation" in navigator) {
+            geoWatcherRef.current = navigator.geolocation.watchPosition(
+                (position) => {
+                    locationRef.current = {
+                        latitude: Number(position.coords.latitude) || 0,
+                        longitude: Number(position.coords.longitude) || 0
+                    };
+                },
+                (error) => {
+                    console.error("Error watching geolocation:", error);
+                },
+                { enableHighAccuracy: true }
+            );
+        } else {
+            console.warn("Geolocation is not supported by this browser.");
         }
 
         setIsTracking(true);
         bufferRef.current = [];
-        startTimestampRef.current = new Date().toISOString();
 
         window.addEventListener('devicemotion', handleDeviceMotion);
         
+        // 10-second batches matching typical ML windowing
         intervalRef.current = window.setInterval(flushBatch, 10000);
     };
 
@@ -125,8 +85,62 @@ export function useSensorWebSocket() {
             intervalRef.current = null;
         }
 
+        if (geoWatcherRef.current !== null) {
+            navigator.geolocation.clearWatch(geoWatcherRef.current);
+            geoWatcherRef.current = null;
+        }
+
         flushBatch();
     };
+
+    useEffect(() => {
+        socketRef.current = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000', {
+            withCredentials: true
+        });
+
+        socketRef.current.on('connect', () => {
+            console.log('Sensor WebSocket connected:', socketRef.current?.id);
+            setIsConnected(true);
+            startTracking();
+        });
+
+        socketRef.current.on('disconnect', () => {
+            console.log('Sensor WebSocket disconnected');
+            setIsConnected(false);
+            stopTracking();
+        });
+
+        socketRef.current.on('crash_alert', (data) => {
+            console.error('CRASH ALERT DETECTED:', data);
+            setLastAnomaly(data);
+            alert(`🚨 CRASH ALERT 🚨\n${data.message}`);
+        });
+
+        socketRef.current.on('sensor_alert', (data) => {
+            console.warn('SENSOR ANOMALY DETECTED:', data);
+            setLastAnomaly(data);
+        });
+
+        socketRef.current.on('sensor_normal', (data) => {
+            // Optional: you can log or update UI for normal status
+            console.log('Sensor Status:', data.message);
+        });
+
+        socketRef.current.on('payload_error', (error) => {
+            console.error('Payload Error:', error);
+        });
+
+        socketRef.current.on('error', (error) => {
+            console.error('WebSocket Error:', error);
+        });
+
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+            }
+            stopTracking();
+        };
+    }, []);
 
     return {
         isConnected,
