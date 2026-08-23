@@ -1,0 +1,135 @@
+span.mode-title {
+	animation: 2s mode_button_spawn cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+}
+
+span.mode-title strong {
+	color: white;
+	display: block;
+	font-size: 30px;
+	margin-bottom: 10px;
+}
+
+span.mode-title p {
+	display: block;
+	margin-bottom: 20px;
+}
+
+div.mode-button {
+	padding: 20px;
+	border: 1px solid white;
+	border-radius: 20px;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	justify-items: center;
+	align-content: center;
+	align-items: center;
+	background: transparent;
+	cursor: pointer;
+	opacity: 0;
+	box-shadow: 0 0 20px 10px hsl(from var(--mode-color) h s l / 0.2) inset;
+
+	transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes mode_button_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 100%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0%;
+	}
+}
+
+div.mode-button.personal {
+	--mode-color: var(--personal);
+	animation: 1s mode_button_spawn cubic-bezier(0.075, 0.82, 0.165, 1) 0.2s forwards;
+}
+
+div.mode-button.vehicle {
+	--mode-color: var(--vehicle);
+	animation: 1s mode_button_spawn cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s forwards;
+}
+
+div.mode-button:hover {
+	background: hsl(from var(--mode-color) h s l / 0.1);
+	transition: 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+div.mode-button svg {
+	width: 80px;
+	height: 80px;
+	display: inline-block;
+}
+
+.mode-button .header {
+	gap: 20px;
+	display: flex;
+}
+
+.mode-button .description {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	font-size: 18px;
+}
+
+.description strong {
+	color: white;
+	font-size: 25px;
+}
+
+.mode-button.personal, .mode-button.personal svg, .mode-button.personal strong {
+	color: var(--personal);
+	stroke: var(--personal);
+	border-color: var(--personal);
+}
+
+.mode-button.vehicle, .mode-button.vehicle svg, .mode-button.vehicle strong {
+	color: var(--vehicle);
+	stroke: var(--vehicle);
+	border-color: var(--vehicle);
+}
+
+.mode-button {
+	display: flex;
+	flex-direction: column;
+}
+
+div.layers {
+	width: 100%;
+	display: block;
+	max-height: 0px;
+	overflow: hidden;
+	opacity: 0;
+	transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+div.layers.visible {
+	opacity: 1;
+	max-height: 290px;
+}
+
+div.layer {
+	padding: 10px;
+	background: black;
+	border-radius: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	font-size: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+div.layer strong {
+	font-size: 25px;
+	color: white !important;
+}
+
+div.layer p {
+	font-size: 16px;
+	opacity: 0.67;
+}

@@ -5,6 +5,8 @@ import Settings from "./components/settings/settings";
 import BottomBar from "./components/bottombar/bottombar";
 import LiveStatus from "./components/homescreen/live_status/live_status";
 import TopBar from "./components/topbar/topbar";
+import Alerts from "./components/alerts/alerts";
+import ChooseMode from "./components/choose_mode/choose_mode";
 
 export type Screen =
 	| "start"
@@ -12,7 +14,8 @@ export type Screen =
 	| "alerts"
 	| "contacts"
 	| "settings"
-	| "liveStatus";
+	| "liveStatus"
+	| "chooseMode";
 
 function GetScreen(props: {
 	screens: Screen[];
@@ -26,14 +29,16 @@ function GetScreen(props: {
 		case "home":
 			return <HomeScreen setScreens={props.setScreens} />;
 		case "alerts":
-			return <HomeScreen setScreens={props.setScreens} />;
+			return <Alerts />;
 		case "contacts":
 			return <HomeScreen setScreens={props.setScreens} />;
 		case "settings":
 			return <Settings />;
 
 		case "liveStatus":
-			return <LiveStatus />;
+			return <LiveStatus setScreens={props.setScreens} />;
+		case "chooseMode":
+			return <ChooseMode />;
 	}
 }
 

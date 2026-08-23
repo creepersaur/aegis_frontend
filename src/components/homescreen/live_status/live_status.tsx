@@ -1,7 +1,11 @@
+import type { Dispatch, SetStateAction } from "react";
 import "./live_status.css";
 import { ChevronDown, Circle } from "lucide-react";
+import type { Screen } from "../../../App";
 
-export default function LiveStatus() {
+export default function LiveStatus(props: {
+	setScreens: Dispatch<SetStateAction<Screen[]>>;
+}) {
 	return (
 		<>
 			<div className="live-status">
@@ -28,7 +32,9 @@ export default function LiveStatus() {
 
 				<strong className="continuous-monitoring">Continuous Monitoring in Progress</strong>
 
-				<button className="monitoring-down">
+				<button className="monitoring-down" onClick={() => {
+					props.setScreens(prev => [...prev, "chooseMode"]);
+				}}>
 					<ChevronDown/>
 				</button>
 			</div>
