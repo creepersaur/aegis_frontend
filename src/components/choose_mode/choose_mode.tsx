@@ -1,4 +1,4 @@
-import { CarFront, User } from "lucide-react";
+import { ActivityIcon, AudioLines, CarFront, Grid, Mic, Move, Rotate3D, User } from "lucide-react";
 import "./choose_mode.css";
 import React from "react";
 
@@ -31,19 +31,19 @@ export default function ChooseMode() {
 					}`}
 				>
 					<div className="layer 1">
-						<strong>Layer 1</strong>
+						<strong><Move/>Layer 1</strong>
 						Phone Motion
-						<p>Phone sensors</p>
+						<p>Gyroscope + Accelerometer</p>
 					</div>
 					<div className="layer 2">
-						<strong>Layer 2</strong>
-						Human + Environment
-						<p>Phone + Wearable + Mic</p>
+						<strong><Mic/>Layer 2</strong>
+						Environment
+						<p>Microphone + GPS</p>
 					</div>
 					<div className="layer 3">
-						<strong>Layer 3</strong>
-						Post-Event Analysis
-						<p>Activity + HR + Response</p>
+						<strong><ActivityIcon/>Layer 3</strong>
+						Vital Analysis
+						<p>Wearable + Heartrate + Oxygen</p>
 					</div>
 				</div>
 			</div>
@@ -65,17 +65,17 @@ export default function ChooseMode() {
 					}`}
 				>
 					<div className="layer 1">
-						<strong>Layer 1</strong>
+						<strong><Rotate3D/>Layer 1</strong>
 						Motion Anomaly
 						<p>Gyro + Accelerometer</p>
 					</div>
 					<div className="layer 2">
-						<strong>Layer 2</strong>
+						<strong><AudioLines/>Layer 2</strong>
 						Audio & Visual Check
 						<p>Microphone + Dashcam</p>
 					</div>
 					<div className="layer 3">
-						<strong>Layer 3</strong>
+						<strong><Grid/>Layer 3</strong>
 						Speed Anomaly
 						<p>GPS Tracking</p>
 					</div>

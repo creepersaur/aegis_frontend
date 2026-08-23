@@ -133,3 +133,12 @@ div.layer p {
 	font-size: 16px;
 	opacity: 0.67;
 }
+
+div.layer strong svg {
+	height: 20px;
+	display: inline-block;
+	vertical-align: middle;
+	width: min-content;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
