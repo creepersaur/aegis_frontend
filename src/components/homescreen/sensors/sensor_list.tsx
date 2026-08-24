@@ -1,4 +1,4 @@
-import { Activity, Camera, ChevronRight, MapPin, Mic, Settings } from "lucide-react"
+import { Activity, ChevronRight, MapPin, Settings } from "lucide-react"
 import "./sensor_list.css"
 
 export default function SensorList() {
@@ -12,16 +12,6 @@ export default function SensorList() {
 			Name: "Gyroscope",
 			Active: true,
 			Icon: Settings,
-		},
-		{
-			Name: "Microphone",
-			Active: true,
-			Icon: Mic,
-		},
-		{
-			Name: "Camera",
-			Active: true,
-			Icon: Camera,
 		},
 		{
 			Name: "Location (GPS)",

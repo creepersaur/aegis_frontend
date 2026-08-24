@@ -1,0 +1,135 @@
+@keyframes profile_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 20%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0%;
+	}
+}
+
+@keyframes profile_title_spawn {
+	0% {
+		opacity: 0;
+		translate: 0 200%;
+	}
+	100% {
+		opacity: 1;
+		translate: 0 0%;
+	}
+}
+
+span.profile-title {
+	font-size: 25px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	color: white;
+
+	opacity: 0;
+	animation: 1s profile_title_spawn forwards 0.1s;
+}
+
+span.profile-title button.back-button {
+	background: transparent;
+	border: none;
+	color: #ff6a00; /* Neon-orange accent */
+	font-size: 16px;
+	cursor: pointer;
+	margin-right: 15px;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	transition: 0.2s;
+}
+
+span.profile-title button.back-button:hover {
+	opacity: 0.8;
+}
+
+div.profile-cards {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin: 10px;
+	padding-bottom: 80px; /* Standard bottom bar clearance */
+	overflow-y: auto;
+	max-height: calc(100vh - 110px);
+	scrollbar-width: none; /* Hide for Firefox */
+	
+	opacity: 0;
+	animation: 1s profile_spawn forwards 0.3s;
+}
+
+div.profile-cards::-webkit-scrollbar {
+	display: none; /* Hide for Chrome/Safari */
+}
+
+.profile-card {
+	background: #121212; /* Dark-grey/black */
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	padding: 15px;
+	flex-shrink: 0;
+}
+
+.profile-card h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	color: #ff6a00; /* Neon orange */
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.profile-field {
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.profile-field:last-child {
+	margin-bottom: 0;
+}
+
+.profile-label {
+	color: #888; /* Muted grey */
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 4px;
+}
+
+.profile-value {
+	color: #fff; /* Crisp white */
+	font-size: 15px;
+}
+
+/* Loader Styles */
+.profile-loader {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 50vh;
+}
+
+.pulsing-dot {
+	width: 40px;
+	height: 40px;
+	background-color: #ff6a00;
+	border-radius: 50%;
+	animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+	0% { transform: scale(0.8); opacity: 0.5; }
+	50% { transform: scale(1.2); opacity: 1; }
+	100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+.error-message {
+	color: #ff6a00;
+	text-align: center;
+	margin-top: 20px;
+}

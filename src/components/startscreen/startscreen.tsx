@@ -2,15 +2,31 @@ import React from "react";
 import type { Screen } from "../../App";
 import GetStartedButton from "./getstartedbutton";
 import "./startscreen.css";
+import { useAuth } from "../../context/AuthContext";
 
 export default function StartScreen(
 	props: { navigate: (new_screen: Screen) => void },
 ) {
 	const [transitioning, setTransitioning] = React.useState(false);
+	const { isAuthenticated, isLoading } = useAuth();
 
 	function goToHome() {
+		if (isLoading) return; // Prevent routing while auth status is being checked
+		
 		setTransitioning(true);
-		setTimeout(() => props.navigate("home"), 1000);
+		
+		setTimeout(() => {
+			if (isAuthenticated) {
+				props.navigate("home");
+			} else {
+				const isReturningUser = localStorage.getItem("isReturningUser");
+				if (isReturningUser) {
+					props.navigate("login");
+				} else {
+					props.navigate("register");
+				}
+			}
+		}, 1000);
 	}
 
 	return (
