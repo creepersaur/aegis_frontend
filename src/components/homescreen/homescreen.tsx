@@ -3,12 +3,16 @@ import ProtectionStatus from "./protection_status/status";
 import SensorList from "./sensors/sensor_list";
 import type { Screen } from "../../App";
 import type { Dispatch, SetStateAction } from "react";
+import { useSensorWebSocket } from "../../hooks/useSensorWebSocket";
 
 export default function HomeScreen(props: {
 	setScreens: Dispatch<SetStateAction<Screen[]>>;
 }) {
+	useSensorWebSocket();
+
 	return <>
 		<ProtectionStatus setScreens={props.setScreens}/>
+		<div style={{ marginTop: "10px" }}></div>
 		<SensorList/>
 	</>
 }
