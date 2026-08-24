@@ -71,9 +71,8 @@ export function useSensorWebSocket() {
         bufferRef.current = [];
 
         window.addEventListener('devicemotion', handleDeviceMotion);
-        
-        // 10-second batches matching typical ML windowing
-        intervalRef.current = window.setInterval(flushBatch, 10000);
+        // 3-second batches matching typical ML windowing
+        intervalRef.current = window.setInterval(flushBatch, 3000);
     };
 
     const stopTracking = () => {

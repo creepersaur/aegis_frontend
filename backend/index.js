@@ -4,6 +4,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 const app = express();
+app.set('trust proxy', true);
 const port = 3000;
 const server = http.createServer(app);
 const cors = require("cors");

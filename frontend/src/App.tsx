@@ -3,6 +3,7 @@ import StartScreen from "./components/startscreen/startscreen";
 import HomeScreen from "./components/homescreen/homescreen";
 import Settings from "./components/settings/settings";
 import ProfileScreen from "./components/settings/ProfileScreen";
+import PrivacyScreen from "./components/settings/PrivacyScreen";
 import AboutScreen from "./components/settings/AboutScreen";
 import TermsScreen from "./components/settings/TermsScreen";
 import ContactsScreen from "./components/contacts/ContactsScreen";
@@ -22,6 +23,7 @@ export type Screen =
 	| "contacts"
 	| "settings"
 	| "profile"
+	| "privacy"
 	| "about"
 	| "terms"
 	| "devices"
@@ -53,6 +55,8 @@ function GetScreen(props: {
 			return <Settings setScreens={props.setScreens} />;
 		case "profile":
 			return <ProfileScreen />;
+		case "privacy":
+			return <PrivacyScreen />;
 		case "about":
 			return <AboutScreen />;
 		case "terms":

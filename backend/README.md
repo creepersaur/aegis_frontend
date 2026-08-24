@@ -125,19 +125,19 @@ aegis/
 
 AEGIS utilizes **Socket.IO (WebSockets over TCP)** for real-time, bidirectional communication between the client and the backend. TCP is strictly used over UDP to guarantee data sequence integrity, which is essential for accurate machine learning time-series window evaluations.
 
-### 10-Second Batching System
-To balance ultra-low latency for emergency SOS alerts with extreme server efficiency and device battery life, AEGIS employs a **10-second windowed batching approach**. 
+### 3-Second Batching System
+To balance ultra-low latency for emergency SOS alerts with extreme server efficiency and device battery life, AEGIS employs a **3-second windowed batching approach**. 
 
-Instead of overloading the server with high-frequency (e.g., 50Hz) individual sensor requests, the client buffers gyroscope and accelerometer data locally and sends a single, compiled JSON array every 10 seconds. The backend seamlessly maps this batch into our Logistic Regression inference pipeline, asynchronously evaluating each data point to detect crash-level anomalies without blocking the server's event loop.
+Instead of overloading the server with high-frequency (e.g., 50Hz) individual sensor requests, the client buffers gyroscope and accelerometer data locally and sends a single, compiled JSON array every 3 seconds. The backend seamlessly maps this batch into our Logistic Regression inference pipeline, asynchronously evaluating each data point to detect crash-level anomalies without blocking the server's event loop.
 
 ### WebSocket Events
 
 * **Listening Events (Ingestion)**
-  * `sensor_batch_stream` — Ingests the 10-second JSON array containing `samples` (sensor readings), `timestamp_start`, and `timestamp_end`.
+  * `sensor_batch_stream` — Ingests the 3-second JSON array containing `samples` (sensor readings), `timestamp_start`, and `timestamp_end`.
 
 * **Emitting Events (Server Responses)**
   * `anomaly_detected` — Emitted immediately to the client if the batch contains an anomaly. The payload includes critical metadata such as the `anomaly_score`, exact `timestamp`, `trigger_features` (e.g., peak acceleration), and the `suggested_action`.
-  * `window_acknowledged` — A lightweight status emitted when a 10-second batch is processed successfully and classified as normal behavior.
+  * `window_acknowledged` — A lightweight status emitted when a 3-second batch is processed successfully and classified as normal behavior.
   * `batch_error` — Emitted if the server receives a corrupted array or invalid data types, gracefully handling the error without crashing.
 
 ---

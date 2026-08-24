@@ -14,16 +14,6 @@ export default function SensorList() {
 			Icon: Settings,
 		},
 		{
-			Name: "Microphone",
-			Active: true,
-			Icon: Mic,
-		},
-		{
-			Name: "Camera",
-			Active: true,
-			Icon: Camera,
-		},
-		{
 			Name: "Location (GPS)",
 			Active: true,
 			Icon: MapPin,

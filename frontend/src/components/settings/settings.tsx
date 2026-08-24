@@ -35,7 +35,7 @@ export default function Settings(props: {
 					Devices <ChevronRight />
 				</button>
 
-				<button>
+				<button onClick={() => props.setScreens(prev => [...prev, "privacy"])}>
 					Privacy & Data <ChevronRight />
 				</button>
 				<button onClick={() => props.setScreens(prev => [...prev, "about"])}>

@@ -100,7 +100,8 @@ module.exports = async (req, res) => {
         const result = parser.getResult();
         const deviceName = `${result.browser.name || 'Unknown Browser'} on ${result.os.name || 'Unknown OS'}`;
 
-        const ipAddress = req.headers['x-forwarded-for']?.split(',')[0] || req.socket?.remoteAddress || req.ip || 'Unknown IP';
+        let ipAddress = req.headers['x-forwarded-for']?.split(',')[0] || req.ip || req.socket?.remoteAddress || 'Unknown IP';
+        if (ipAddress === '::1' || ipAddress === '::ffff:127.0.0.1') ipAddress = '127.0.0.1 (Localhost)';
 
         await Session.create({
             id: sessionId,
