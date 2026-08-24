@@ -46,6 +46,7 @@
 }
 
 .register-form {
+	width: 100%;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -55,6 +56,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+	width: 100%;
 }
 
 .form-step h3 {
@@ -79,6 +81,11 @@
     transition: border-color 0.2s;
 }
 
+select option {
+	background: black;
+	border-radius: 10px;
+}
+
 .form-step input:focus, .form-step select:focus, .form-step textarea:focus {
     border-color: var(--accent);
 }
@@ -91,6 +98,7 @@
 .row-inputs {
     display: flex;
     gap: 15px;
+	width: 100%;
 }
 
 .row-inputs > div {
@@ -98,6 +106,7 @@
     flex-direction: column;
     flex: 1;
     gap: 12px;
+	width: 0%;
 }
 
 .form-step hr {
